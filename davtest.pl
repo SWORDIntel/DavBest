@@ -46,8 +46,8 @@ use strict;
 use HTTP::DAV;
 use HTTP::Request;
 use Getopt::Long;
-use Net::SSL;
-use Crypt::SSLeay;
+#use Net::SSL;
+#use Crypt::SSLeay;
 
 # cli options
 use vars qw/%OPTIONS %RESULTS $dav/;
