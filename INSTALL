@@ -1,0 +1,4 @@
+cpan install HTTP::DAV 
+#sudo apt-get install libsnmp-perl 'Net::SSL'
+ln -vs /pentest/02/davtest/davtest.pl /usr/bin/davtest.pl
+ln -vs /pentest/02/davtest/davtest.pl /usr/bin/davtest
