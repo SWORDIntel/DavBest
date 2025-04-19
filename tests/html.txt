@@ -1,2 +1,3 @@
-content=HTML put via davtest<br />
-execmatch=HTML put via davtest
+# html.txt  ─ unchanged except marker
+content=DAVTEST-OK<br />
+execmatch=DAVTEST-OK
