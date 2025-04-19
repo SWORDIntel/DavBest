@@ -1,4 +1,4 @@
-# DAVTester 2.x  
+# DavBest 2.XXX EXPLICIT
 *Modern WebDAV upload‑and‑execution tester*  
 
 _rewrite of **davtest.pl 1.x** (2015) in Python 3_  
