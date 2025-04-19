@@ -1,0 +1,3 @@
+# rb.txt  – mod_ruby  
+content=print "Content-Type: text/html\\r\\n\\r\\nDAVTEST-OK"
+execmatch=DAVTEST-OK
