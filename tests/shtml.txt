@@ -1,2 +1,3 @@
-content=<!--#config timefmt="%Y" -->YEAR:<!--#flastmod file="$$FILENAME$$"-->:YEAR<br />EXEC ls:<!--#exec cmd="ls -al"-->:EXEC ls<br />EXEC dir:<!--#exec cmd="dir"-->:EXEC dir
-execmatch=YEAR\:[0-9]{4}\:YEAR
+# shtml.txt                               :contentReference[oaicite:10]{index=10}&#8203;:contentReference[oaicite:11]{index=11}
+content=<!--#echo var="DATE_LOCAL" -->\nDAVTEST-OK
+execmatch=DAVTEST-OK
