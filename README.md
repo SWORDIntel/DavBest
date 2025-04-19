@@ -135,3 +135,4 @@ An ncurses form collects options.
 * **Paulino Calderón** (author 1.1)  
 * **RewardOne** – modern Python rewrite  
 * Community contributors – see `AUTHORS.md`
+* SWORD - John - Version 2.0
