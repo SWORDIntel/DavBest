@@ -1,2 +1,3 @@
-content=TXT put via davtest
-execmatch=TXT put via davtest
+# txt.txt  – still proves plain PUT
+content=DAVTEST-OK
+execmatch=DAVTEST-OK
