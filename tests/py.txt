@@ -1,0 +1,3 @@
+# py.txt  – mod_wsgi / mod_python  
+content=#!/usr/bin/env python3\nprint("Content-Type: text/html\\r\\n\\r\\nDAVTEST-OK")
+execmatch=DAVTEST-OK
