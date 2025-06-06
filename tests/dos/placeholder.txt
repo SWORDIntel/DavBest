@@ -1,0 +1,3 @@
+This is a placeholder for DoS tests.
+The presence of this file ensures the tests/dos directory is created.
+Actual DoS test files (e.g., large XML, specific malformed requests) would be placed here.

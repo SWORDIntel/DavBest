@@ -1,0 +1,5 @@
+# tests/auth_bypass.yaml
+# Attempts to write a file without authentication to test for auth bypass vulnerabilities
+# like CVE-2023-49105.
+content: "DAVTEST-OK-AUTH-BYPASS"
+execmatch: "DAVTEST-OK-AUTH-BYPASS"
