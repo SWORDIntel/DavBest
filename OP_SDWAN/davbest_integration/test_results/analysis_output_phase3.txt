@@ -1,0 +1,37 @@
+Starting DavBest Sensor Analysis Rules Processor for log file: OP_SDWAN/davbest_integration/test_results/sensor_output.log
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+
+--- DAVBEST HIGH-PRIORITY ALERTS ---
+[ALERT] CRITICAL INTEGRITY VIOLATION: DavBest Sensor reported unexpected success. Target: '/host_root/etc/passwd', Details: 'Conceptual: Host path modification was unexpectedly permitted (Simulated Decryption from file line).', Timestamp: YYYY-MM-DDTHH:MM:SSZ
+--- END OF ALERTS ---
+
+Finished processing log file: OP_SDWAN/davbest_integration/test_results/sensor_output.log. Processed 7 non-empty lines.
