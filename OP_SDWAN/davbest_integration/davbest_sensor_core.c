@@ -190,7 +190,7 @@ void perform_probe(const char *base_host_path, const char *file_relative_path) {
     if (current_local_time == NULL) {
         strcpy(time_buffer, "timestamp_error");
     } else {
-        strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M:%S (UTC %z)");
+        strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M:%S (UTC %z)", current_local_time);
     }
     snprintf(audit_string, sizeof(audit_string), "\n# DavBest Integrity Probe: Write attempt at %s by DavBestSensorModule\n", time_buffer);
 

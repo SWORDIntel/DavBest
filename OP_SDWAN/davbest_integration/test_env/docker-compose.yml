@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  davbest_sensor_test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: davbest_sensor_test_container
+    volumes:
+      - ./mock_host_fs:/host_root:rw # Mount the mock host filesystem
+    # If the event receiver was also containerized and managed by this compose:
+    # depends_on:
+    #   - event_receiver_service
+    # environment:
+      # Example: Pass receiver details if needed by sensor, though current sensor logs to stdout
+      # - DAVBEST_RECEIVER_IP=event_receiver_service
+      # - DAVBEST_RECEIVER_PORT=12345
+    # Cap_add and security_opt might be needed if LD_PRELOAD behavior is restricted
+    # For example, if running as non-root and secure-execution features of ld are active.
+    # For root, it's generally not an issue.
+    # cap_add:
+    #   - SYS_ADMIN # Example, overly permissive
+    # security_opt:
+    #   - seccomp:unconfined # Example, overly permissive
