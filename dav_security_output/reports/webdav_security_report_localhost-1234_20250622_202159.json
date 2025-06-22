@@ -1,0 +1,44 @@
+{
+  "report_info": {
+    "target_url": "http://localhost:1234",
+    "generation_time": "2025-06-22T20:21:59.856148",
+    "total_tests": 3
+  },
+  "test_results": [
+    {
+      "timestamp": "2025-06-22T20:21:59.849716",
+      "file_type": "svg",
+      "payload_name": "basic",
+      "params_used": {},
+      "local_payload_path": "./dav_security_output/svg_payloads/payload_svg_basic_1750623719.svg",
+      "target_remote_path": "dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg",
+      "upload_status": "failed",
+      "verification_status": "skipped",
+      "error_message": null
+    },
+    {
+      "timestamp": "2025-06-22T20:21:59.852808",
+      "file_type": "css",
+      "payload_name": "basic",
+      "params_used": {},
+      "local_payload_path": "./dav_security_output/css_payloads/payload_css_basic_1750623719.css",
+      "target_remote_path": "dav_security_tests/css_basic/payload_css_basic_1750623719.css",
+      "upload_status": "failed",
+      "verification_status": "skipped",
+      "error_message": null
+    },
+    {
+      "timestamp": "2025-06-22T20:21:59.855667",
+      "file_type": "svg",
+      "payload_name": "script_tag",
+      "params_used": {
+        "js_code": "console.log('batch test');"
+      },
+      "local_payload_path": "./dav_security_output/svg_payloads/payload_svg_script-tag_1750623719.svg",
+      "target_remote_path": "dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg",
+      "upload_status": "failed",
+      "verification_status": "skipped",
+      "error_message": null
+    }
+  ]
+}

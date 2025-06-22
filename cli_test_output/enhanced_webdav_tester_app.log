@@ -1,0 +1,7 @@
+2025-06-22 21:06:13,752 - WebDAVSecurityTesterApp - [INFO] - Starting test: FileType='svg', PayloadName='script_tag', Params={'js_code': "console.log('CLI test');"}
+2025-06-22 21:06:13,753 - WebDAVSecurityTesterApp - [INFO] - Generated payload: /app/cli_test_output/payloads_generated/payload_svg_script_tag_1750626373.svg
+2025-06-22 21:06:13,753 - WebDAVSecurityTesterApp - [INFO] - Target remote path: ewt_single_test_svg_script_tag_1750626373/svg/script_tag/payload_svg_script_tag_1750626373.svg
+2025-06-22 21:06:13,763 - WebDAVSecurityTesterApp - [ERROR] - Upload failed for ewt_single_test_svg_script_tag_1750626373/svg/script_tag/payload_svg_script_tag_1750626373.svg
+2025-06-22 21:06:13,763 - WebDAVSecurityTesterApp - [INFO] - Test completed for svg/script_tag. Status: FAILURE
+2025-06-22 21:06:13,764 - WebDAVSecurityTesterApp - [INFO] - Generating report: /app/cli_test_output/reports/webdav_security_assessment_report_20250622_210613.md
+2025-06-22 21:06:13,765 - WebDAVSecurityTesterApp - [INFO] - Report successfully saved to /app/cli_test_output/reports/webdav_security_assessment_report_20250622_210613.md
