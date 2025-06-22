@@ -69,3 +69,20 @@ SelectTestsScreen LoadingIndicator {
     width: 100%;
     height: 100%;
 }
+
+/* Run Tests Screen Styling */
+RunTestsScreen #start_tests_button {
+    width: 60%;
+    margin: 1; /* Uniform margin */
+    /* Centering will be handled by the screen's default align or specific layout container if needed */
+}
+
+RunTestsScreen #test_run_log {
+    border: round $primary;
+    background: $panel-darken-2; /* Slightly darker for log */
+    padding: 1;
+    margin: 1 2;
+    width: 90%;
+    height: 15; /* Adjust height as needed, make it scrollable */
+    overflow-y: scroll;
+}
