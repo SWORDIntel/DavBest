@@ -1,0 +1,32 @@
+2025-06-22 21:06:23,116 - WebDAVSecurityTesterApp - [INFO] - Starting batch of 5 tests.
+2025-06-22 21:06:23,116 - WebDAVSecurityTesterApp - [INFO] - Running batch test 1/5: svg/basic
+2025-06-22 21:06:23,116 - WebDAVSecurityTesterApp - [INFO] - Starting test: FileType='svg', PayloadName='basic', Params={}
+2025-06-22 21:06:23,118 - WebDAVSecurityTesterApp - [INFO] - Generated payload: /app/cli_batch_test_output/payloads_generated/payload_svg_basic_1750626383.svg
+2025-06-22 21:06:23,118 - WebDAVSecurityTesterApp - [INFO] - Target remote path: batch_run_1/svg_basics/svg/basic/payload_svg_basic_1750626383.svg
+2025-06-22 21:06:23,126 - WebDAVSecurityTesterApp - [ERROR] - Upload failed for batch_run_1/svg_basics/svg/basic/payload_svg_basic_1750626383.svg
+2025-06-22 21:06:23,126 - WebDAVSecurityTesterApp - [INFO] - Test completed for svg/basic. Status: FAILURE
+2025-06-22 21:06:23,126 - WebDAVSecurityTesterApp - [INFO] - Running batch test 2/5: svg/script_tag
+2025-06-22 21:06:23,126 - WebDAVSecurityTesterApp - [INFO] - Starting test: FileType='svg', PayloadName='script_tag', Params={'js_code': "console.log('Batch SVG script test');"}
+2025-06-22 21:06:23,127 - WebDAVSecurityTesterApp - [INFO] - Generated payload: /app/cli_batch_test_output/payloads_generated/payload_svg_script_tag_1750626383.svg
+2025-06-22 21:06:23,127 - WebDAVSecurityTesterApp - [INFO] - Target remote path: batch_run_1/svg_scripts/svg/script_tag/payload_svg_script_tag_1750626383.svg
+2025-06-22 21:06:23,131 - WebDAVSecurityTesterApp - [ERROR] - Upload failed for batch_run_1/svg_scripts/svg/script_tag/payload_svg_script_tag_1750626383.svg
+2025-06-22 21:06:23,131 - WebDAVSecurityTesterApp - [INFO] - Test completed for svg/script_tag. Status: FAILURE
+2025-06-22 21:06:23,131 - WebDAVSecurityTesterApp - [INFO] - Running batch test 3/5: css/basic
+2025-06-22 21:06:23,131 - WebDAVSecurityTesterApp - [INFO] - Starting test: FileType='css', PayloadName='basic', Params={}
+2025-06-22 21:06:23,132 - WebDAVSecurityTesterApp - [INFO] - Generated payload: /app/cli_batch_test_output/payloads_generated/payload_css_basic_1750626383.css
+2025-06-22 21:06:23,132 - WebDAVSecurityTesterApp - [INFO] - Target remote path: batch_run_1/css_basics/css/basic/payload_css_basic_1750626383.css
+2025-06-22 21:06:23,134 - WebDAVSecurityTesterApp - [ERROR] - Upload failed for batch_run_1/css_basics/css/basic/payload_css_basic_1750626383.css
+2025-06-22 21:06:23,135 - WebDAVSecurityTesterApp - [INFO] - Test completed for css/basic. Status: FAILURE
+2025-06-22 21:06:23,135 - WebDAVSecurityTesterApp - [INFO] - Running batch test 4/5: css/font_face_exfil
+2025-06-22 21:06:23,135 - WebDAVSecurityTesterApp - [INFO] - Starting test: FileType='css', PayloadName='font_face_exfil', Params={'callback_url': 'http://mock.listener/batch_css_font_exfil', 'font_family_name': 'BatchTestFont'}
+2025-06-22 21:06:23,136 - WebDAVSecurityTesterApp - [INFO] - Generated payload: /app/cli_batch_test_output/payloads_generated/payload_css_font_face_exfil_1750626383.css
+2025-06-22 21:06:23,136 - WebDAVSecurityTesterApp - [INFO] - Target remote path: batch_run_1/css_exfil/css/font_face_exfil/payload_css_font_face_exfil_1750626383.css
+2025-06-22 21:06:23,139 - WebDAVSecurityTesterApp - [ERROR] - Upload failed for batch_run_1/css_exfil/css/font_face_exfil/payload_css_font_face_exfil_1750626383.css
+2025-06-22 21:06:23,139 - WebDAVSecurityTesterApp - [INFO] - Test completed for css/font_face_exfil. Status: FAILURE
+2025-06-22 21:06:23,139 - WebDAVSecurityTesterApp - [INFO] - Running batch test 5/5: invalid_type_for_error_test/nonexistent_payload
+2025-06-22 21:06:23,139 - WebDAVSecurityTesterApp - [INFO] - Starting test: FileType='invalid_type_for_error_test', PayloadName='nonexistent_payload', Params={}
+2025-06-22 21:06:23,139 - WebDAVSecurityTesterApp - [ERROR] - Configuration error for test invalid_type_for_error_test/nonexistent_payload: Unsupported file type for testing: invalid_type_for_error_test
+2025-06-22 21:06:23,139 - WebDAVSecurityTesterApp - [INFO] - Test completed for invalid_type_for_error_test/nonexistent_payload. Status: FAILURE
+2025-06-22 21:06:23,140 - WebDAVSecurityTesterApp - [INFO] - Batch testing finished.
+2025-06-22 21:06:23,140 - WebDAVSecurityTesterApp - [INFO] - Generating report: /app/cli_batch_test_output/reports/webdav_security_assessment_report_20250622_210623.md
+2025-06-22 21:06:23,141 - WebDAVSecurityTesterApp - [INFO] - Report successfully saved to /app/cli_batch_test_output/reports/webdav_security_assessment_report_20250622_210623.md

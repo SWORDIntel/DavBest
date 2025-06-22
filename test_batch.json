@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "file_type": "svg",
+      "payload_name": "basic",
+      "params": {},
+      "remote_target_dir": "batch_run_1/svg_basics"
+    },
+    {
+      "file_type": "svg",
+      "payload_name": "script_tag",
+      "params": {
+        "js_code": "console.log('Batch SVG script test');"
+      },
+      "remote_target_dir": "batch_run_1/svg_scripts"
+    },
+    {
+      "file_type": "css",
+      "payload_name": "basic",
+      "params": {},
+      "remote_target_dir": "batch_run_1/css_basics"
+    },
+    {
+      "file_type": "css",
+      "payload_name": "font_face_exfil",
+      "params": {
+        "callback_url": "http://mock.listener/batch_css_font_exfil",
+        "font_family_name": "BatchTestFont"
+      },
+      "remote_target_dir": "batch_run_1/css_exfil"
+    },
+    {
+        "file_type": "invalid_type_for_error_test",
+        "payload_name": "nonexistent_payload",
+        "params": {},
+        "remote_target_dir": "batch_run_1/error_test"
+    }
+  ]
+}

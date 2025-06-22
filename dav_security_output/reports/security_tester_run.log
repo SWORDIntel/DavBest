@@ -1,0 +1,95 @@
+2025-06-22 20:20:34,824 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:34,983 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:43,367 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:43,368 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='basic', Params='{}'
+2025-06-22 20:21:43,369 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_basic_1750623703.svg
+2025-06-22 20:21:43,369 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg
+2025-06-22 20:21:43,382 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg. Skipping verification GET.
+2025-06-22 20:21:43,382 - WebDAVSecurityTester - INFO - Test 'svg/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:43,383 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202143.md
+2025-06-22 20:21:43,383 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202143.json
+2025-06-22 20:21:43,385 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:43,385 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='basic', Params='{}'
+2025-06-22 20:21:43,386 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_basic_1750623703.svg
+2025-06-22 20:21:43,386 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg
+2025-06-22 20:21:43,389 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg. Skipping verification GET.
+2025-06-22 20:21:43,389 - WebDAVSecurityTester - INFO - Test 'svg/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:43,390 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202143.md
+2025-06-22 20:21:43,390 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202143.json
+2025-06-22 20:21:43,391 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:43,391 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='basic', Params='{}'
+2025-06-22 20:21:43,392 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_basic_1750623703.svg
+2025-06-22 20:21:43,392 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg
+2025-06-22 20:21:43,395 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg. Skipping verification GET.
+2025-06-22 20:21:43,395 - WebDAVSecurityTester - INFO - Test 'svg/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:43,395 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202143.md
+2025-06-22 20:21:43,396 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202143.json
+2025-06-22 20:21:59,812 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:59,813 - WebDAVSecurityTester - INFO - Starting batch of 3 tests.
+2025-06-22 20:21:59,813 - WebDAVSecurityTester - INFO - Running batch test 1/3: {'file_type': 'svg', 'payload_name': 'basic', 'params': {}}
+2025-06-22 20:21:59,813 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='basic', Params='{}'
+2025-06-22 20:21:59,813 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_basic_1750623719.svg
+2025-06-22 20:21:59,813 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg
+2025-06-22 20:21:59,822 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg. Skipping verification GET.
+2025-06-22 20:21:59,823 - WebDAVSecurityTester - INFO - Test 'svg/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,823 - WebDAVSecurityTester - INFO - Running batch test 2/3: {'file_type': 'css', 'payload_name': 'basic', 'params': {}}
+2025-06-22 20:21:59,823 - WebDAVSecurityTester - INFO - Starting test: FileType='css', PayloadName='basic', Params='{}'
+2025-06-22 20:21:59,823 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/css_payloads/payload_css_basic_1750623719.css
+2025-06-22 20:21:59,823 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/css_basic/payload_css_basic_1750623719.css
+2025-06-22 20:21:59,826 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/css_basic/payload_css_basic_1750623719.css. Skipping verification GET.
+2025-06-22 20:21:59,826 - WebDAVSecurityTester - INFO - Test 'css/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,826 - WebDAVSecurityTester - INFO - Running batch test 3/3: {'file_type': 'svg', 'payload_name': 'script_tag', 'params': {'js_code': "console.log('batch test');"}}
+2025-06-22 20:21:59,826 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='script_tag', Params='{'js_code': "console.log('batch test');"}'
+2025-06-22 20:21:59,827 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_script-tag_1750623719.svg
+2025-06-22 20:21:59,827 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg
+2025-06-22 20:21:59,830 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg. Skipping verification GET.
+2025-06-22 20:21:59,830 - WebDAVSecurityTester - INFO - Test 'svg/script_tag' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,830 - WebDAVSecurityTester - INFO - Batch testing completed.
+2025-06-22 20:21:59,831 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202159.md
+2025-06-22 20:21:59,831 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202159.json
+2025-06-22 20:21:59,832 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:59,833 - WebDAVSecurityTester - INFO - Starting batch of 3 tests.
+2025-06-22 20:21:59,833 - WebDAVSecurityTester - INFO - Running batch test 1/3: {'file_type': 'svg', 'payload_name': 'basic', 'params': {}}
+2025-06-22 20:21:59,833 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='basic', Params='{}'
+2025-06-22 20:21:59,833 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_basic_1750623719.svg
+2025-06-22 20:21:59,833 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg
+2025-06-22 20:21:59,837 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg. Skipping verification GET.
+2025-06-22 20:21:59,837 - WebDAVSecurityTester - INFO - Test 'svg/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,837 - WebDAVSecurityTester - INFO - Running batch test 2/3: {'file_type': 'css', 'payload_name': 'basic', 'params': {}}
+2025-06-22 20:21:59,837 - WebDAVSecurityTester - INFO - Starting test: FileType='css', PayloadName='basic', Params='{}'
+2025-06-22 20:21:59,837 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/css_payloads/payload_css_basic_1750623719.css
+2025-06-22 20:21:59,837 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/css_basic/payload_css_basic_1750623719.css
+2025-06-22 20:21:59,840 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/css_basic/payload_css_basic_1750623719.css. Skipping verification GET.
+2025-06-22 20:21:59,840 - WebDAVSecurityTester - INFO - Test 'css/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,840 - WebDAVSecurityTester - INFO - Running batch test 3/3: {'file_type': 'svg', 'payload_name': 'script_tag', 'params': {'js_code': "console.log('batch test');"}}
+2025-06-22 20:21:59,840 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='script_tag', Params='{'js_code': "console.log('batch test');"}'
+2025-06-22 20:21:59,840 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_script-tag_1750623719.svg
+2025-06-22 20:21:59,840 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg
+2025-06-22 20:21:59,844 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg. Skipping verification GET.
+2025-06-22 20:21:59,844 - WebDAVSecurityTester - INFO - Test 'svg/script_tag' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,844 - WebDAVSecurityTester - INFO - Batch testing completed.
+2025-06-22 20:21:59,845 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202159.md
+2025-06-22 20:21:59,845 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202159.json
+2025-06-22 20:21:59,846 - WebDAVSecurityTester - INFO - WebDAVSecurityTester initialized. Outputting payloads to subdirs of: ./dav_security_output, Reports to: ./dav_security_output/reports
+2025-06-22 20:21:59,846 - WebDAVSecurityTester - INFO - Starting batch of 3 tests.
+2025-06-22 20:21:59,846 - WebDAVSecurityTester - INFO - Running batch test 1/3: {'file_type': 'svg', 'payload_name': 'basic', 'params': {}}
+2025-06-22 20:21:59,846 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='basic', Params='{}'
+2025-06-22 20:21:59,847 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_basic_1750623719.svg
+2025-06-22 20:21:59,847 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg
+2025-06-22 20:21:59,849 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_basic/payload_svg_basic_1750623719.svg. Skipping verification GET.
+2025-06-22 20:21:59,849 - WebDAVSecurityTester - INFO - Test 'svg/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,849 - WebDAVSecurityTester - INFO - Running batch test 2/3: {'file_type': 'css', 'payload_name': 'basic', 'params': {}}
+2025-06-22 20:21:59,849 - WebDAVSecurityTester - INFO - Starting test: FileType='css', PayloadName='basic', Params='{}'
+2025-06-22 20:21:59,850 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/css_payloads/payload_css_basic_1750623719.css
+2025-06-22 20:21:59,850 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/css_basic/payload_css_basic_1750623719.css
+2025-06-22 20:21:59,852 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/css_basic/payload_css_basic_1750623719.css. Skipping verification GET.
+2025-06-22 20:21:59,852 - WebDAVSecurityTester - INFO - Test 'css/basic' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,852 - WebDAVSecurityTester - INFO - Running batch test 3/3: {'file_type': 'svg', 'payload_name': 'script_tag', 'params': {'js_code': "console.log('batch test');"}}
+2025-06-22 20:21:59,852 - WebDAVSecurityTester - INFO - Starting test: FileType='svg', PayloadName='script_tag', Params='{'js_code': "console.log('batch test');"}'
+2025-06-22 20:21:59,853 - WebDAVSecurityTester - INFO - Generated payload at: ./dav_security_output/svg_payloads/payload_svg_script-tag_1750623719.svg
+2025-06-22 20:21:59,853 - WebDAVSecurityTester - INFO - Target remote path: dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg
+2025-06-22 20:21:59,855 - WebDAVSecurityTester - WARNING - Upload failed for dav_security_tests/svg_script-tag/payload_svg_script-tag_1750623719.svg. Skipping verification GET.
+2025-06-22 20:21:59,855 - WebDAVSecurityTester - INFO - Test 'svg/script_tag' completed. Upload: failed, Verification: skipped
+2025-06-22 20:21:59,855 - WebDAVSecurityTester - INFO - Batch testing completed.
+2025-06-22 20:21:59,856 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202159.md
+2025-06-22 20:21:59,856 - WebDAVSecurityTester - INFO - Report successfully generated: ./dav_security_output/reports/webdav_security_report_localhost-1234_20250622_202159.json

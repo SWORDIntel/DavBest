@@ -1,0 +1,19 @@
+{
+  "tests": [
+    {
+      "file_type": "svg",
+      "payload_name": "basic",
+      "params": {}
+    },
+    {
+      "file_type": "css",
+      "payload_name": "basic",
+      "params": {}
+    },
+    {
+      "file_type": "svg",
+      "payload_name": "script_tag",
+      "params": {"js_code": "console.log('batch test');"}
+    }
+  ]
+}
