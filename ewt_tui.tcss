@@ -86,3 +86,25 @@ RunTestsScreen #test_run_log {
     height: 15; /* Adjust height as needed, make it scrollable */
     overflow-y: scroll;
 }
+
+/* View Reports Screen Styling */
+ViewReportsScreen #report_files_list {
+    border: round $primary;
+    background: $panel-darken-1;
+    padding: 1;
+    margin: 1 2;
+    width: 90%; /* Take more width */
+    height: 80%; /* Take more height */
+}
+
+ViewReportsScreen #no_reports_message {
+    padding: 2;
+    text-align: center;
+    width: 100%;
+}
+
+ViewReportsScreen LoadingIndicator {
+    align: center middle;
+    width: 100%;
+    height: 100%;
+}
