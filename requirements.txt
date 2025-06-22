@@ -1,1 +1,4 @@
+textual
 requests
+lxml
+webdavclient3
