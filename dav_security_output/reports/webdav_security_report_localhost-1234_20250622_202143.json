@@ -1,0 +1,20 @@
+{
+  "report_info": {
+    "target_url": "http://localhost:1234",
+    "generation_time": "2025-06-22T20:21:43.395630",
+    "total_tests": 1
+  },
+  "test_results": [
+    {
+      "timestamp": "2025-06-22T20:21:43.395211",
+      "file_type": "svg",
+      "payload_name": "basic",
+      "params_used": {},
+      "local_payload_path": "./dav_security_output/svg_payloads/payload_svg_basic_1750623703.svg",
+      "target_remote_path": "dav_security_tests/svg_basic/payload_svg_basic_1750623703.svg",
+      "upload_status": "failed",
+      "verification_status": "skipped",
+      "error_message": null
+    }
+  ]
+}

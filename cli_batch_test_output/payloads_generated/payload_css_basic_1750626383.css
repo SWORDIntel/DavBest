@@ -1,0 +1,13 @@
+/* WebDAV Security Test CSS - Basic */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #333; /* Dark grey text */
+}
+.test-css-element {
+    border: 2px dashed blue;
+    padding: 15px;
+    margin: 10px;
+    background-color: #e7f3fe; /* Light blue background */
+}
+/* End of basic test CSS */
