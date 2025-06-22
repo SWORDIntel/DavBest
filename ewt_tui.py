@@ -21,11 +21,12 @@ try:
         'output_dir': './ewt_tui_temp_output/payloads',
         'report_dir': './ewt_tui_temp_output/reports'
     }
-    # Create a global instance for fetching tests, or create it on demand.
+    # Ensure output directories are created if the tester's __init__ does that.
     os.makedirs(temp_tester_config['output_dir'], exist_ok=True)
     os.makedirs(temp_tester_config['report_dir'], exist_ok=True)
 
     # This instance is SOLELY for get_all_available_tests.
+    # Actual test runs will use the TargetConfig from the UI.
     _ewt_tester_for_listing = WebDAVSecurityTester(config=temp_tester_config)
 except ImportError:
     _ewt_tester_for_listing = None
@@ -67,7 +68,7 @@ class MainMenuScreen(Screen):
         elif event.button.id == "view_reports":
             self.app.push_screen(ViewReportsScreen())
         elif event.button.id == "generate_config":
-            self.app.push_screen(PlaceholderScreen(title="Generate Configuration"))
+            self.app.push_screen(GenerateConfigScreen())
         elif event.button.id == "quit_app_button":
             self.app.action_quit_app()
 
@@ -134,18 +135,75 @@ class ConfigureTargetScreen(Screen):
             self.app.target_config.verify_ssl = verify_ssl_switch.value
 
             self.app.notify("Configuration saved!", severity="information", timeout=3)
-            self.app.log("Popping ConfigureTargetScreen after save.")
             self.app.pop_screen()
-
 
     def action_pop_screen(self) -> None:
         self.app.pop_screen()
 
+class GenerateConfigScreen(Screen):
+    BINDINGS = [("escape", "pop_screen", "Back"), ("ctrl+s", "save_config_json", "Save JSON")]
+
+    class AvailableTestsMessage(Message):
+        """Message to pass available tests from worker to screen."""
+        def __init__(self, tests: list[str]) -> None:
+            self.tests = tests
+            super().__init__()
+
+    def __init__(self, name: str | None = None, id: str | None = None, classes: str | None = None) -> None:
+        super().__init__(name, id, classes)
+        self._loading_indicator: LoadingIndicator | None = None
+        self._available_tests_list: SelectionList[str] | None = None
+        self.selected_batch_tests: list[dict] = []
+
+    def compose(self) -> ComposeResult:
+        yield Header(name="Generate Batch Configuration")
+        self._loading_indicator = LoadingIndicator()
+        yield self._loading_indicator
+        yield Static("Select tests to add to batch configuration:", classes="section_label")
+        yield Static("TODO: Add area for selected tests, parameters, common settings, and save button.", classes="placeholder_text")
+        yield Footer()
+
+    def on_mount(self) -> None:
+        self.run_worker(self._fetch_available_tests_for_batch, thread=True)
+
+    @work(thread=True)
+    def _fetch_available_tests_for_batch(self) -> None:
+        worker = get_current_worker()
+        if not worker.is_cancelled:
+            if _ewt_tester_for_listing:
+                try:
+                    available_tests = _ewt_tester_for_listing.get_all_available_tests()
+                    self.post_message(GenerateConfigScreen.AvailableTestsMessage(available_tests))
+                except Exception as e:
+                    self.app.notify(f"Error fetching tests: {e}", severity="error", timeout=10)
+                    self.post_message(GenerateConfigScreen.AvailableTestsMessage([]))
+            else:
+                self.app.notify("Test runner not available for listing tests.", severity="error", timeout=5)
+                self.post_message(GenerateConfigScreen.AvailableTestsMessage([]))
+
+    async def on_generate_config_screen_available_tests_message(self, message: AvailableTestsMessage) -> None:
+        if self._loading_indicator:
+            await self._loading_indicator.remove()
+            self._loading_indicator = None
+
+        if not message.tests:
+            no_tests_static = Static("No tests available to select.", id="no_avail_tests_message")
+            await self.mount(no_tests_static, after=self.query_one(".section_label", Static))
+            return
+
+        selections = [Selection(test_id, test_id) for test_id in message.tests]
+        self._available_tests_list = SelectionList[str](*selections, id="available_tests_for_batch")
+        await self.mount(self._available_tests_list, after=self.query_one(".section_label", Static))
+
+    def action_save_config_json(self) -> None:
+        self.app.notify("Save JSON action triggered (not yet implemented).", severity="warning")
+
+    def action_pop_screen(self) -> None:
+        self.app.pop_screen()
 
 class ViewReportsScreen(Screen):
     BINDINGS = [("escape", "pop_screen", "Back")]
 
-    # Define potential report directories
     REPORT_DIRS = [
         "./ewt_tui_output/reports/",
         "./ewt_output/reports/",
@@ -191,8 +249,6 @@ class ViewReportsScreen(Screen):
             await self._loading_indicator.remove()
             self._loading_indicator = None
 
-        log_messages = "\n".join(checked_dirs_messages)
-
         if not report_files:
             await self.mount(Static("No Markdown reports found in checked directories.", id="no_reports_message"))
         else:
@@ -211,12 +267,10 @@ class ViewReportsScreen(Screen):
     def action_pop_screen(self) -> None:
         self.app.pop_screen()
 
-
 class SelectTestsScreen(Screen):
     BINDINGS = [("escape", "pop_screen", "Back"), ("s", "save_selection", "Save")]
 
     class AvailableTestsMessage(Message):
-        """Message to pass available tests from worker to screen."""
         def __init__(self, tests: list[str]) -> None:
             self.tests = tests
             super().__init__()
@@ -237,7 +291,6 @@ class SelectTestsScreen(Screen):
 
     @work(thread=True)
     def _fetch_available_tests(self) -> None:
-        """Worker to fetch available tests."""
         worker = get_current_worker()
         if not worker.is_cancelled:
             if _ewt_tester_for_listing:
@@ -268,7 +321,6 @@ class SelectTestsScreen(Screen):
         self._selection_list = SelectionList[str](*selections, id="test_selection_list")
         await self.mount(self._selection_list)
 
-
     def action_save_selection(self) -> None:
         if self._selection_list:
             self.app.selected_tests = list(self._selection_list.selected)
@@ -277,7 +329,6 @@ class SelectTestsScreen(Screen):
 
     def action_pop_screen(self) -> None:
         self.app.pop_screen()
-
 
 class RunTestsScreen(Screen):
     BINDINGS = [("escape", "pop_screen", "Back")]
@@ -335,7 +386,6 @@ class RunTestsScreen(Screen):
                 'report_dir': './ewt_tui_output/reports',
                 'log_level': "INFO"
             }
-            import os
             os.makedirs(current_target_config['output_dir'], exist_ok=True)
             os.makedirs(current_target_config['report_dir'], exist_ok=True)
 
@@ -389,7 +439,6 @@ class RunTestsScreen(Screen):
             self.post_message(self.TestStatusMessage(f"[bold red]Critical error in test worker: {e}[/bold red]"))
             self.post_message(self.AllTestsCompleteMessage(None))
 
-
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "start_tests_button" and not self._is_running_tests:
             if not self.app.selected_tests or not self.app.target_config.url:
@@ -417,13 +466,11 @@ class RunTestsScreen(Screen):
         self._is_running_tests = False
         self.app.notify("Test run finished.", severity="information", timeout=5)
 
-
     def action_pop_screen(self) -> None:
         if self._is_running_tests:
             self.app.notify("Tests are currently running.", severity="warning", timeout=3)
             return
         self.app.pop_screen()
-
 
 class PlaceholderScreen(Screen):
     BINDINGS = [("escape", "pop_screen", "Back")]
@@ -444,7 +491,6 @@ class PlaceholderScreen(Screen):
     def action_pop_screen(self) -> None:
         self.app.pop_screen()
 
-
 class EWTApp(App[None]):
     CSS_PATH = "ewt_tui.tcss"
     SCREENS = {"main_menu": MainMenuScreen}
@@ -458,7 +504,6 @@ class EWTApp(App[None]):
     def action_quit_app(self) -> None:
         self.exit()
 
-
 if __name__ == "__main__":
     app = EWTApp()
     async def run_test():
@@ -469,9 +514,7 @@ if __name__ == "__main__":
             await pilot.press("enter")
             await pilot.wait_for_animation()
             assert isinstance(app.screen, ConfigureTargetScreen), "ConfigureTargetScreen not active"
-
-            # This part of the test had issues with pilot; simplified it to just save.
-            # Real value saving is manually tested.
+            
             def set_value_and_save():
                 config_screen = app.screen
                 if isinstance(config_screen, ConfigureTargetScreen):
@@ -479,10 +522,9 @@ if __name__ == "__main__":
                     url_input.value = "http://configured.test.com"
                     config_screen.query_one("#save_config", Button).press()
             app.call_later(set_value_and_save)
-            await pilot.pause(0.2) # Wait for save and pop
+            await pilot.pause(0.2)
             await pilot.wait_for_animation()
             
-            # Simplified assertion
             assert app.target_config.url == "http://configured.test.com"
             assert isinstance(app.screen, MainMenuScreen), "Not back to MainMenu after config save"
 
@@ -490,7 +532,7 @@ if __name__ == "__main__":
             await pilot.click("#select_tests")
             await pilot.wait_for_animation()
             assert isinstance(app.screen, SelectTestsScreen), f"SelectTestsScreen not active. Currently: {app.screen}"
-            await pilot.pause(0.5) # Worker needs time
+            await pilot.pause(0.5)
 
             try:
                 selection_list = app.screen.query_one(SelectionList)
@@ -528,11 +570,21 @@ if __name__ == "__main__":
             await pilot.press("escape")
             await pilot.wait_for_animation()
             assert isinstance(app.screen, MainMenuScreen), f"Not back to MainMenu after escaping ViewReportsScreen. Currently: {app.screen}"
+            
+            # 5. Navigate to Generate Config Screen
+            await pilot.click("#generate_config")
+            await pilot.wait_for_animation()
+            assert isinstance(app.screen, GenerateConfigScreen), f"GenerateConfigScreen not active. Currently: {app.screen}"
+            await pilot.pause(0.5)
+            
+            await pilot.press("escape")
+            await pilot.wait_for_animation()
+            assert isinstance(app.screen, MainMenuScreen), f"Not back to MainMenu after escaping GenerateConfigScreen. Currently: {app.screen}"
 
-            # 5. Quit
+            # 6. Quit
             await pilot.press("q")
             await pilot.pause(0.1)
 
     import asyncio
     asyncio.run(run_test())
-    print("TUI basic auto_pilot test with navigation to config, select, run, and view reports screens completed.")
+    print("TUI auto_pilot test with navigation to all main screens completed.")

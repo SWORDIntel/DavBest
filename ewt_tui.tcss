@@ -70,6 +70,37 @@ SelectTestsScreen LoadingIndicator {
     height: 100%;
 }
 
+/* Generate Config Screen Styling */
+GenerateConfigScreen .section_label {
+    padding: 1 2 0 2; /* Add some padding, especially at the top */
+    text-style: bold;
+}
+
+GenerateConfigScreen #available_tests_for_batch {
+    border: round $primary;
+    background: $panel-darken-1;
+    padding: 1;
+    margin: 0 2 1 2; /* No top margin, rely on section_label padding */
+    width: 90%;
+    height: 40%; /* Adjust as needed, might be smaller if other sections are added */
+}
+
+GenerateConfigScreen .placeholder_text {
+    padding: 1 2;
+    color: $text-muted;
+}
+
+GenerateConfigScreen #no_avail_tests_message {
+    padding: 1 2;
+    color: $text-disabled;
+}
+
+GenerateConfigScreen LoadingIndicator {
+    align: center middle;
+    width: 100%;
+    height: 100%;
+}
+
 /* Run Tests Screen Styling */
 RunTestsScreen #start_tests_button {
     width: 60%;
