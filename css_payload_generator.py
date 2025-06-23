@@ -197,6 +197,75 @@ body {{
 
         return "\n".join(css_parts)
 
+    def get_payload_params_definition(self, payload_name: str) -> list[dict]:
+        """Return parameter definitions for the given CSS payload type."""
+        definitions = []
+        default_callback = 'https://default.attacker.com/css_callback'
+
+        if payload_name == 'basic':
+            pass # No parameters
+        elif payload_name == 'background_exfil':
+            definitions.extend([
+                {
+                    'name': 'callback_url', 'label': 'Callback URL', 'type': 'string',
+                    'default': default_callback,
+                    'description': 'URL to send the exfiltration trigger to.', 'required': True
+                },
+                {
+                    'name': 'target_element', 'label': 'Target CSS Selector', 'type': 'string',
+                    'default': 'body',
+                    'description': 'CSS selector for the element whose background will trigger the exfil.', 'required': True
+                },
+                {
+                    'name': 'exfil_trigger_info', 'label': 'Trigger Info (Query Param)', 'type': 'string',
+                    'default': 'bg_exfil_active',
+                    'description': 'Identifier sent as a query parameter in the callback.', 'required': False
+                }
+            ])
+        elif payload_name == 'font_face_exfil':
+            definitions.extend([
+                {
+                    'name': 'callback_url', 'label': 'Callback URL', 'type': 'string',
+                    'default': default_callback,
+                    'description': 'URL for the @font-face src.', 'required': True
+                },
+                {
+                    'name': 'font_family_name', 'label': 'Font Family Name', 'type': 'string',
+                    'default': 'LeakyFontCSSExfil',
+                    'description': 'Custom font-family name to use.', 'required': True
+                },
+                {
+                    'name': 'exfil_trigger_info', 'label': 'Trigger Info (Query Param)', 'type': 'string',
+                    'default': 'font_exfil_attempt',
+                    'description': 'Identifier sent as a query parameter.', 'required': False
+                }
+            ])
+        elif payload_name == 'media_query_exfil':
+            definitions.append({
+                'name': 'callback_url', 'label': 'Callback URL Base', 'type': 'string',
+                'default': default_callback,
+                'description': 'Base URL for media query triggered requests. Feature name will be appended.', 'required': True
+            })
+        elif payload_name in ['input_value_exfil', 'keylogger_simulation']:
+            definitions.extend([
+                {
+                    'name': 'callback_url', 'label': 'Callback URL Base', 'type': 'string',
+                    'default': default_callback,
+                    'description': 'Base URL for character exfiltration attempts.', 'required': True
+                },
+                {
+                    'name': 'target_input_selector', 'label': 'Target Input CSS Selector', 'type': 'string',
+                    'default': 'input[type="password"]' if payload_name == 'input_value_exfil' else 'input[type="text"]',
+                    'description': 'CSS selector for the input field to target.', 'required': True
+                },
+                {
+                    'name': 'chars_to_test', 'label': 'Characters to Test', 'type': 'string',
+                    'default': 'abcdefghijklmnopqrstuvwxyz0123456789',
+                    'description': 'String of characters to test for exfiltration.', 'required': False
+                }
+            ])
+        return definitions
+
 
 if __name__ == '__main__':
     main_logger_css = logging.getLogger(__name__)
