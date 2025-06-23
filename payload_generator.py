@@ -104,6 +104,31 @@ class PayloadGenerator:
         """
         raise NotImplementedError("Subclasses must implement get_available_payloads()")
 
+    def get_payload_params_definition(self, payload_name: str) -> list[dict]:
+        """
+        Return a list of parameter definitions for a given payload name.
+        Each definition is a dictionary. See documentation for expected structure.
+        Example:
+        [
+            {
+                'name': 'internal_param_name',
+                'label': 'User-Friendly Label',
+                'type': 'string', # 'string', 'integer', 'float', 'boolean', 'choice'
+                'default': 'some_value',
+                'description': 'Tooltip or help text.',
+                'required': True,
+                'choices': ['a', 'b', 'c'] # if type is 'choice'
+            },
+            # ... more params
+        ]
+        This method should be implemented by subclasses.
+        If a payload takes no parameters, it should return an empty list.
+        """
+        # Base implementation could return empty or raise NotImplementedError
+        # Forcing subclasses to define this makes sense.
+        raise NotImplementedError("Subclasses must implement get_payload_params_definition()")
+
+
 if __name__ == '__main__':
     # This basicConfig will set up the root logger if no handlers are configured yet.
     # It's useful for seeing log messages from the example usage.

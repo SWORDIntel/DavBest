@@ -71,31 +71,84 @@ SelectTestsScreen LoadingIndicator {
 }
 
 /* Generate Config Screen Styling */
-GenerateConfigScreen .section_label {
-    padding: 1 2 0 2; /* Add some padding, especially at the top */
-    text-style: bold;
+GenerateConfigScreen #main_config_layout {
+    layout: horizontal;
+    height: 1fr; /* Fill available space below header */
 }
+
+GenerateConfigScreen VerticalScroll { /* Common style for the panels */
+    width: 1fr; /* Distribute width among panels in Horizontal layout */
+    height: 100%;
+    border: round $primary-lighten-2;
+    margin: 0 1;
+    padding: 1;
+}
+GenerateConfigScreen #available_tests_panel { width: 35%; }
+GenerateConfigScreen #configured_tests_panel { width: 30%; }
+GenerateConfigScreen #params_and_common_panel { width: 35%; }
+
+
+GenerateConfigScreen .panel_title {
+    text-style: bold;
+    padding-bottom: 1;
+    text-align: center;
+}
+
+GenerateConfigScreen .section_label { /* For sub-sections within a panel */
+    padding: 1 0 0 0;
+    text-style: bold;
+    margin-top: 1;
+    border: top-heavy $primary-background-darken-2;
+}
+
 
 GenerateConfigScreen #available_tests_for_batch {
-    border: round $primary;
+    /* border: round $primary; */ /* Panel already has border */
     background: $panel-darken-1;
-    padding: 1;
-    margin: 0 2 1 2; /* No top margin, rely on section_label padding */
-    width: 90%;
-    height: 40%; /* Adjust as needed, might be smaller if other sections are added */
+    /* padding: 1; */ /* Panel already has padding */
+    /* margin: 0 2 1 2; */
+    width: 100%;
+    height: 1fr; /* Fill available space in panel */
+    margin-bottom: 1; /* Space before Add button */
 }
+GenerateConfigScreen #add_test_to_batch_button { width: 100%; }
 
-GenerateConfigScreen .placeholder_text {
-    padding: 1 2;
+GenerateConfigScreen #configured_tests_table {
+    width: 100%;
+    height: 1fr; /* Fill available space in panel */
+    margin-bottom: 1; /* Space before Remove button */
+}
+GenerateConfigScreen #remove_test_from_batch_button { width: 100%; }
+
+
+GenerateConfigScreen #params_form_container {
+    width: 100%;
+    height: 1fr; /* Main area for params */
+    padding: 1 0;
+    /* background: $panel-darken-3; */ /* Optional different bg for form area */
+}
+GenerateConfigScreen #params_form_container Label { margin-top: 1; }
+GenerateConfigScreen #params_form_container Input { width: 100%; margin-bottom:1; }
+GenerateConfigScreen #params_form_container Static { /* For descriptions */
     color: $text-muted;
+    margin-left: 2;
+    margin-bottom: 1;
 }
 
-GenerateConfigScreen #no_avail_tests_message {
-    padding: 1 2;
+
+GenerateConfigScreen #common_callback_url,
+GenerateConfigScreen #common_remote_dir {
+    width: 100%;
+    margin-top:1;
+}
+
+
+GenerateConfigScreen #no_avail_tests_message { /* For available tests list */
+    padding: 1 0;
     color: $text-disabled;
 }
 
-GenerateConfigScreen LoadingIndicator {
+GenerateConfigScreen LoadingIndicator { /* Specifically within #available_tests_panel */
     align: center middle;
     width: 100%;
     height: 100%;

