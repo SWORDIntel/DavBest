@@ -14,6 +14,7 @@ import os # For path operations in ViewReportsScreen
 # Attempt to import core components
 try:
     from webdav_security_tester import WebDAVSecurityTester
+    from webdav_server import DAVServer
     # We need a "dummy" config for WebDAVSecurityTester to initialize for get_all_available_tests
     # This config won't be used for actual connections, just for listing tests.
     # Output dirs might be created, so use a temporary or controllable path if needed.
@@ -59,6 +60,7 @@ class MainMenuScreen(Screen):
             Button("Run Tests", id="run_tests", variant="primary"),
             Button("View Reports", id="view_reports", variant="primary"),
             Button("Generate Config", id="generate_config", variant="primary"),
+            Button("WebDAV Server", id="webdav_server", variant="primary"),
             Button("Quit", id="quit_app_button", variant="error"),
             id="main_menu_buttons"
         )
@@ -75,6 +77,8 @@ class MainMenuScreen(Screen):
             self.app.push_screen(ViewReportsScreen())
         elif event.button.id == "generate_config":
             self.app.push_screen(GenerateConfigScreen())
+        elif event.button.id == "webdav_server":
+            self.app.push_screen(DAVServerScreen())
         elif event.button.id == "quit_app_button":
             self.app.action_quit_app()
 
@@ -150,6 +154,81 @@ class ConfigureTargetScreen(Screen):
 
     def action_pop_screen(self) -> None:
         self.app.pop_screen()
+
+
+
+class SelectTestsScreen(Screen):
+    BINDINGS = [("escape", "pop_screen", "Back"), ("s", "save_selection", "Save")]
+
+    class AvailableTestsMessage(Message):
+        """Message to pass available tests from worker to screen."""
+        def __init__(self, tests: list[str]) -> None:
+            self.tests = tests
+            super().__init__()
+
+    def __init__(self, name: str | None = None, id: str | None = None, classes: str | None = None) -> None:
+        super().__init__(name, id, classes)
+        self._loading_indicator: LoadingIndicator | None = None
+        self._selection_list: SelectionList[str] | None = None
+
+    def compose(self) -> ComposeResult:
+        yield Header(name="Select Tests")
+        self._loading_indicator = LoadingIndicator()
+        yield self._loading_indicator
+        # SelectionList will be added here once tests are loaded
+        yield Footer()
+
+    def on_mount(self) -> None:
+        """Fetch available tests when the screen is mounted."""
+        self.run_worker(self._fetch_available_tests, thread=True) # thread=True is important for blocking IO
+
+    @work(thread=True) # Corrected decorator and ensuring it runs in a thread
+    def _fetch_available_tests(self) -> None:
+        """Worker to fetch available tests."""
+        worker = get_current_worker() # Get the worker instance
+        if not worker.is_cancelled:  # Check if the worker has been cancelled
+            if _ewt_tester_for_listing:
+                try:
+                    # Simulate some work / potential IO delay
+                    # import time
+                    # time.sleep(0.2) # Simulate network/processing delay
+                    available_tests = _ewt_tester_for_listing.get_all_available_tests()
+                    self.post_message(self.AvailableTestsMessage(available_tests))
+                except Exception as e:
+                    self.app.notify(f"Error fetching tests: {e}", severity="error", timeout=10)
+                    self.post_message(self.AvailableTestsMessage([])) # Send empty list on error
+            else:
+                self.app.notify("Test runner not available.", severity="error", timeout=5)
+                self.post_message(self.AvailableTestsMessage([])) # Send empty list
+
+    async def on_select_tests_screen_available_tests_message(self, message: AvailableTestsMessage) -> None:
+        """Handle the message containing the available tests."""
+        if self._loading_indicator:
+            await self._loading_indicator.remove()
+            self._loading_indicator = None
+
+        if not message.tests:
+            await self.mount(Static("No tests available or error loading tests.", id="no_tests_message"))
+            return
+
+        selections = []
+        for test_id_str in message.tests:
+            # Check if this test was previously selected
+            is_selected = test_id_str in self.app.selected_tests
+            selections.append(Selection(test_id_str, test_id_str, is_selected))
+
+        self._selection_list = SelectionList[str](*selections, id="test_selection_list")
+        await self.mount(self._selection_list)
+
+    def action_save_selection(self) -> None:
+        if self._selection_list:
+            self.app.selected_tests = list(self._selection_list.selected)
+            self.app.notify(f"{len(self.app.selected_tests)} tests selected.", severity="information", timeout=3)
+        self.app.pop_screen()
+
+    def action_pop_screen(self) -> None:
+        self.app.pop_screen()
+
 
 class GenerateConfigScreen(Screen):
     BINDINGS = [("escape", "pop_screen", "Back"), ("ctrl+s", "save_config_json", "Save JSON")]
@@ -329,34 +408,35 @@ class GenerateConfigScreen(Screen):
 
         # 1. Update params for the currently focused test in configured_tests_data from the form.
         # This is a simplified approach. A more robust solution would save params as they are edited.
-        current_focused_row_key = self._configured_tests_table.cursor_coordinate.row_key
-        if current_focused_row_key is not None:
-            focused_uid_str = str(current_focused_row_key.value)
-            for test_data in self.configured_tests_data:
-                if str(test_data['uid']) == focused_uid_str:
-                    self.app.log(f"Attempting to save params from form for test UID {focused_uid_str}, test_id {test_data['test_id']}")
-                    current_params_from_form = {}
-                    # Query inputs within _params_form_container
-                    # IDs are like f"param_input_{test_id.replace('/','_')}_{p_def['name']}"
-                    file_type, payload_name = test_data['test_id'].split('/',1)
-                    param_defs = []
-                    if _ewt_tester_for_listing:
-                        if file_type == "svg":
-                            param_defs = _ewt_tester_for_listing.svg_generator.get_payload_params_definition(payload_name)
-                        elif file_type == "css":
-                            param_defs = _ewt_tester_for_listing.css_generator.get_payload_params_definition(payload_name)
+        if self._configured_tests_table.row_count > 0 and self._configured_tests_table.cursor_row >= 0:
+            current_focused_row_key = self._configured_tests_table.get_row_at(self._configured_tests_table.cursor_row)[0]
+            if current_focused_row_key is not None:
+                focused_uid_str = str(current_focused_row_key)
+                for test_data in self.configured_tests_data:
+                    if str(test_data['uid']) == focused_uid_str:
+                        self.app.log(f"Attempting to save params from form for test UID {focused_uid_str}, test_id {test_data['test_id']}")
+                        current_params_from_form = {}
+                        # Query inputs within _params_form_container
+                        # IDs are like f"param_input_{test_id.replace('/','_')}_{p_def['name']}"
+                        file_type, payload_name = test_data['test_id'].split('/',1)
+                        param_defs = []
+                        if _ewt_tester_for_listing:
+                            if file_type == "svg":
+                                param_defs = _ewt_tester_for_listing.svg_generator.get_payload_params_definition(payload_name)
+                            elif file_type == "css":
+                                param_defs = _ewt_tester_for_listing.css_generator.get_payload_params_definition(payload_name)
 
-                    for p_def in param_defs:
-                        param_input_id = f"#param_input_{test_data['test_id'].replace('/','_')}_{p_def['name']}"
-                        try:
-                            param_widget = self._params_form_container.query_one(param_input_id, Input)
-                            # TODO: Handle type conversion (int, float, bool from Switch)
-                            current_params_from_form[p_def['name']] = param_widget.value
-                        except Exception as e:
-                            self.app.log(f"Could not find/query param input {param_input_id}: {e}")
-                    test_data['params'] = current_params_from_form
-                    self.app.log(f"Updated params for UID {focused_uid_str}: {current_params_from_form}")
-                    break
+                        for p_def in param_defs:
+                            param_input_id = f"#param_input_{test_data['test_id'].replace('/','_')}_{p_def['name']}"
+                            try:
+                                param_widget = self._params_form_container.query_one(param_input_id, Input)
+                                # TODO: Handle type conversion (int, float, bool from Switch)
+                                current_params_from_form[p_def['name']] = param_widget.value
+                            except Exception as e:
+                                self.app.log(f"Could not find/query param input {param_input_id}: {e}")
+                        test_data['params'] = current_params_from_form
+                        self.app.log(f"Updated params for UID {focused_uid_str}: {current_params_from_form}")
+                        break
 
         # 2. Collect common settings
         common_callback = self.query_one("#common_callback_url", Input).value or None
@@ -729,17 +809,120 @@ class PlaceholderScreen(Screen):
         self.app.pop_screen()
 
 
+class DAVServerScreen(Screen):
+    BINDINGS = [("escape", "pop_screen", "Back")]
+
+    class ServerStatusMessage(Message):
+        def __init__(self, status: str, message: str) -> None:
+            self.status = status
+            self.message = message
+            super().__init__()
+
+    def compose(self) -> ComposeResult:
+        yield Header(name="WebDAV Server Control")
+        with VerticalScroll(id="dav_server_config"):
+            yield Label("Root Directory:")
+            yield Input(value="./webdav_root", id="dav_root_dir")
+            yield Label("Host IP:")
+            yield Input(value="0.0.0.0", id="dav_host")
+            yield Label("Port:")
+            yield Input(value="8080", id="dav_port", validators=[Number(minimum=1, maximum=65535)])
+            yield Horizontal(
+                Button("Start Server", id="start_dav_server", variant="success"),
+                Button("Stop Server", id="stop_dav_server", variant="error", disabled=True),
+            )
+            yield Static("Server Status: [bold red]Stopped[/bold red]", id="dav_server_status")
+            yield RichLog(id="dav_server_log", wrap=True)
+        yield Footer()
+
+    @work(thread=True)
+    def _start_server_worker(self, root_path: str, host: str, port: int) -> None:
+        try:
+            self.post_message(self.ServerStatusMessage("starting", f"Attempting to start server on {host}:{port}..."))
+            self.app.dav_server_instance = DAVServer(root_path=root_path, host=host, port=port)
+            self.post_message(self.ServerStatusMessage("started", f"Server running on http://{host}:{port}"))
+            self.app.dav_server_instance.start() # This is a blocking call
+            self.post_message(self.ServerStatusMessage("stopped", "Server has been stopped."))
+        except Exception as e:
+            self.post_message(self.ServerStatusMessage("error", f"Failed to start server: {e}"))
+            self.app.dav_server_instance = None
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "start_dav_server":
+            if self.app.dav_server_instance:
+                self.app.notify("Server is already running.", severity="warning")
+                return
+
+            root_dir_widget = self.query_one("#dav_root_dir", Input)
+            host_widget = self.query_one("#dav_host", Input)
+            port_widget = self.query_one("#dav_port", Input)
+
+            if not port_widget.is_valid:
+                self.app.notify("Invalid port number.", severity="error")
+                return
+
+            root_path = root_dir_widget.value
+            host = host_widget.value
+            port = int(port_widget.value)
+
+            self.run_worker(self._start_server_worker, root_path, host, port, exclusive=True)
+            self.query_one("#start_dav_server", Button).disabled = True
+            self.query_one("#stop_dav_server", Button).disabled = False
+
+        elif event.button.id == "stop_dav_server":
+            if self.app.dav_server_instance and self.app.dav_server_instance.server:
+                self.app.dav_server_instance.server.stop()
+                self.app.dav_server_instance = None
+                self.query_one("#start_dav_server", Button).disabled = False
+                self.query_one("#stop_dav_server", Button).disabled = True
+                self.app.notify("Server stopped.")
+            else:
+                self.app.notify("Server is not running.", severity="warning")
+
+    async def on_dav_server_screen_server_status_message(self, message: ServerStatusMessage) -> None:
+        status_widget = self.query_one("#dav_server_status", Static)
+        log_widget = self.query_one("#dav_server_log", RichLog)
+
+        if message.status == "starting":
+            status_widget.update("Server Status: [bold yellow]Starting...[/bold yellow]")
+            log_widget.write(f"[yellow]{message.message}[/yellow]")
+        elif message.status == "started":
+            status_widget.update("Server Status: [bold green]Running[/bold green]")
+            log_widget.write(f"[green]{message.message}[/green]")
+        elif message.status == "stopped":
+            status_widget.update("Server Status: [bold red]Stopped[/bold red]")
+            log_widget.write(f"[red]{message.message}[/red]")
+            self.query_one("#start_dav_server", Button).disabled = False
+            self.query_one("#stop_dav_server", Button).disabled = True
+        elif message.status == "error":
+            status_widget.update("Server Status: [bold red]Error[/bold red]")
+            log_widget.write(f"[bold red]{message.message}[/bold red]")
+            self.query_one("#start_dav_server", Button).disabled = False
+            self.query_one("#stop_dav_server", Button).disabled = True
+
+    def action_pop_screen(self) -> None:
+        if self.app.dav_server_instance:
+            self.app.notify("Stopping WebDAV server before leaving screen.", severity="warning")
+            self.app.dav_server_instance.server.stop()
+            self.app.dav_server_instance = None
+        self.app.pop_screen()
+
+
 class EWTApp(App[None]):
     CSS_PATH = "ewt_tui.tcss"
     SCREENS = {"main_menu": MainMenuScreen}
 
     target_config: TargetConfig = TargetConfig()
     selected_tests: list[str] = [] # Store IDs of selected tests
+    dav_server_instance: DAVServer | None = None
 
     def on_mount(self) -> None:
         self.push_screen("main_menu")
 
     def action_quit_app(self) -> None:
+        # Stop the WebDAV server if it's running before exiting
+        if self.dav_server_instance:
+            self.dav_server_instance.server.stop()
         self.exit()
 
 
