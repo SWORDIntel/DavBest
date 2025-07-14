@@ -98,7 +98,7 @@ GenerateConfigScreen .section_label { /* For sub-sections within a panel */
     padding: 1 0 0 0;
     text-style: bold;
     margin-top: 1;
-    border: top-heavy $primary-background-darken-2;
+    border-top: heavy $primary-background-darken-2;
 }
 
 
