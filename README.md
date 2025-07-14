@@ -22,6 +22,21 @@ The Enhanced WebDAV Security Assessment Tool (EWT) is a Python-based command-lin
 *   **Logging**: Detailed logging of operations for debugging and audit.
 *   **Integrated WebDAV Server**: A lightweight, scriptable WebDAV server for hosting payloads locally.
 
+### Operational Security Features
+
+*   **C2 Obfuscation & Hardening**:
+    *   **HTTP Header Spoofing**: The WebDAV server can spoof its `Server` header to mimic other servers (e.g., IIS), making it harder to fingerprint. The header value is stored in Base64 to avoid simple static analysis.
+    *   **TLS/SSL Integration**: The WebDAV server can be started with TLS/SSL encryption (`--tls` flag) to protect C2 communications. It uses a self-signed certificate by default.
+*   **Vector Generation Engine**:
+    *   A TUI-based wizard allows for the rapid creation of attack packages.
+    *   The engine combines a payload (e.g., an executable) with a decoy document (e.g., a PDF) and generates a `.url` file that, when clicked, accesses the decoy document while executing the payload from the WebDAV server.
+*   **Real-time Intelligence Panel**:
+    *   The WebDAV server includes an "Intel Middleware" that logs requests for specific, high-value assets (e.g., the payload).
+    *   This provides real-time alerts when a target interacts with the staged files, including the target's IP address and the requested asset.
+*   **Payload Lifecycle Management**:
+    *   A `build` command in the CLI allows for the generation of payload source code from C-style templates.
+    *   This feature enables quick customization of payloads by replacing placeholders for C2 server IP addresses and ports.
+
 ## Requirements
 
 *   Python 3.8+
