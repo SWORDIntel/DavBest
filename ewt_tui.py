@@ -15,6 +15,7 @@ import os # For path operations in ViewReportsScreen
 try:
     from webdav_security_tester import WebDAVSecurityTester
     from webdav_server import DAVServer
+    from ewt_cli import generate_attack_package
     # We need a "dummy" config for WebDAVSecurityTester to initialize for get_all_available_tests
     # This config won't be used for actual connections, just for listing tests.
     # Output dirs might be created, so use a temporary or controllable path if needed.
@@ -60,6 +61,7 @@ class MainMenuScreen(Screen):
             Button("Run Tests", id="run_tests", variant="primary"),
             Button("View Reports", id="view_reports", variant="primary"),
             Button("Generate Config", id="generate_config", variant="primary"),
+            Button("Vector Generator", id="vector_generator", variant="primary"),
             Button("WebDAV Server", id="webdav_server", variant="primary"),
             Button("Quit", id="quit_app_button", variant="error"),
             id="main_menu_buttons"
@@ -77,6 +79,8 @@ class MainMenuScreen(Screen):
             self.app.push_screen(ViewReportsScreen())
         elif event.button.id == "generate_config":
             self.app.push_screen(GenerateConfigScreen())
+        elif event.button.id == "vector_generator":
+            self.app.push_screen(VectorGenScreen())
         elif event.button.id == "webdav_server":
             self.app.push_screen(DAVServerScreen())
         elif event.button.id == "quit_app_button":
@@ -151,6 +155,52 @@ class ConfigureTargetScreen(Screen):
             self.app.log("Attempting to pop ConfigureTargetScreen after save button press.") # Add log
             self.app.pop_screen()
 
+
+    def action_pop_screen(self) -> None:
+        self.app.pop_screen()
+
+
+class VectorGenScreen(Screen):
+    BINDINGS = [("escape", "pop_screen", "Back")]
+
+    def compose(self) -> ComposeResult:
+        yield Header(name="Vector Generation Wizard")
+        with VerticalScroll(id="vector_gen_form"):
+            yield Label("Payload Path:")
+            yield Input(placeholder="/path/to/payload.exe", id="payload_path_input")
+            yield Label("Decoy Document Path:")
+            yield Input(placeholder="/path/to/decoy.pdf", id="decoy_path_input")
+            yield Label("C2 Server URL (ip:port):")
+            yield Input(placeholder="10.10.10.10:8080", id="c2_url_input")
+            yield Button("Generate Package", id="generate_package_button", variant="success")
+            yield RichLog(id="vector_gen_log", wrap=True)
+        yield Footer()
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "generate_package_button":
+            payload_path = self.query_one("#payload_path_input", Input).value
+            decoy_path = self.query_one("#decoy_path_input", Input).value
+            c2_url = self.query_one("#c2_url_input", Input).value
+            log_widget = self.query_one("#vector_gen_log", RichLog)
+            log_widget.clear()
+
+            if not all([payload_path, decoy_path, c2_url]):
+                log_widget.write("[red]Error: All fields are required.[/red]")
+                return
+
+            log_widget.write("[yellow]Generating attack package...[/yellow]")
+
+            # This is a bit of a hack to capture the print output from the function
+            # A better solution would be for the function to return a status and message
+            import io
+            from contextlib import redirect_stdout
+
+            f = io.StringIO()
+            with redirect_stdout(f):
+                generate_attack_package(payload_path, decoy_path, c2_url)
+            output = f.getvalue()
+
+            log_widget.write(output)
 
     def action_pop_screen(self) -> None:
         self.app.pop_screen()

