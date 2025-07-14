@@ -37,6 +37,20 @@ The Enhanced WebDAV Security Assessment Tool (EWT) is a Python-based command-lin
     *   A `build` command in the CLI allows for the generation of payload source code from C-style templates.
     *   This feature enables quick customization of payloads by replacing placeholders for C2 server IP addresses and ports.
 
+### GHOST LEVEL 2 (PHANTOM) Protocol
+
+The GHOST LEVEL 2 (PHANTOM) protocol is an advanced obfuscation and evasion framework designed to defeat manual reverse-engineering and standard debuggers.
+
+*   **Polymorphic C2 Infrastructure**:
+    *   **C2 Domain Fronting**: The `c2_redirector.py` module dynamically generates CDN hostnames and frontable domains to conceal C2 traffic. The `Host` header construction is obfuscated using control-flow flattening.
+    *   **Polymorphic Payload Engine**: The `PolymorphicEngine` class in `polymorphic_engine.py` instruments C/C++ source code with control-flow flattening, opaque predicate injection, and parasitic code injection.
+*   **Advanced EDR Evasion & Counter-Forensics**:
+    *   **In-Memory EDR Unhooking**: The `unhooker.cpp` stager dynamically resolves WinAPI calls, restores syscall stubs by reading a clean copy of `ntdll.dll`, and overwrites hooks in memory.
+    *   **Volatile Artifact Scrubber**: The `scrubber.cpp` module securely deletes files by overwriting their on-disk contents with random data and using dynamically resolved `NtOpenFile` and `NtDeleteFile` syscalls.
+*   **Multi-Stage Payload Orchestration**:
+    *   **Minimalist Reconnaissance Stager**: The `recon_stager.cpp` fingerprints the target environment using checks interwoven with parasitic code and controlled by a flattened switch-case structure.
+    *   **Secure Module Dispatch**: The `secure_module_dispatcher.cpp` module receives and decrypts secondary payloads using a one-time key derived from reconnaissance data and executes them using a reflective DLL loading technique.
+
 ## Requirements
 
 *   Python 3.8+
